@@ -10,6 +10,7 @@ export default defineConfig({
             '@apis': path.resolve(__dirname, './src/apis'),
             '@app': path.resolve(__dirname, './src/app'),
             '@components': path.resolve(__dirname, './src/components'),
+            '@trionesdev/antd-vue-ext': path.resolve(__dirname, './src/triones-components'),
         }
     },
 })

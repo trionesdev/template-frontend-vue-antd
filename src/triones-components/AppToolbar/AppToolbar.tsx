@@ -1,25 +1,69 @@
 import {defineComponent} from "vue";
-import useStyle from "./style.ts";
-import useConfigInject from "ant-design-vue/es/config-provider/hooks/useConfigInject";
-import  classNames from "classnames";
+import {genAppToolbarStyle} from "./style.ts";
+import classNames from "classnames";
+import {useCssInJs} from "../hooks/useCssInJs.ts";
+import {Avatar, AvatarProps, Menu, MenuProps, Space} from "ant-design-vue";
+import _ from "lodash"
 
 type AppToolbarProps = {
-    title?: string
+    avatar?: AvatarProps
+    navItems?: MenuProps['items']
+    selectedKeys?: string[];
 }
 export const AppToolbar = defineComponent({
     name: "AppToolbar",
     props: {
-        title: {
+        class: {
             type: String,
-            required: true
+            required: false,
+            default: ''
+        },
+        style: {
+            type: Object,
+            required: false,
+            default: () => ({})
+        },
+        avatar: {
+            type: Object,
+            required: false
+        },
+        navItems: {
+            type: Array,
+            required: false
+        },
+        selectedKeys: {
+            type: Array<string>,
+            required: false
         }
     },
     setup(props: AppToolbarProps, {slots}) {
-        const {prefixCls} = useConfigInject('app-toolbar', props)
-        const [wrapSSR, hashId] = useStyle(prefixCls)
-        const appToolbarCls = classNames(prefixCls.value,{
-            [hashId.value]:true
+        const prefixCls = "app-toolbar";
+        const [wrapSSR, hashId] = useCssInJs({prefixCls: prefixCls, styleFun: genAppToolbarStyle})
+        const appToolbarCls = classNames(prefixCls, {
+            [hashId]: true
         })
-        return () => wrapSSR(<div class={[classNames(appToolbarCls)]}>{slots.default?.()}</div>)
+        return () => wrapSSR(<div class={[classNames(appToolbarCls)]}>
+                <div class={classNames(`${prefixCls}-heading`, hashId, props.class)}>
+                    <div class={classNames(`${prefixCls}-heading-left`, hashId)}>
+                        <Space>
+                            {props.avatar && <Avatar {...props.avatar} />}
+                            <div class={classNames(`${prefixCls}-heading-left-title`, hashId)}>
+                                {slots.title?.()}
+                            </div>
+                        </Space>
+                    </div>
+                    {!_.isEmpty(props.navItems) && (
+                        <Menu
+                            mode="horizontal"
+                            items={props.navItems}
+                            selectedKeys={props.selectedKeys}
+                        />
+                    )}
+                    <div class={classNames(`${prefixCls}-heading-right`, hashId)}>
+                        <Space>{slots.extra?.()}</Space>
+                    </div>
+                </div>
+            </div>
+        )
     }
 })

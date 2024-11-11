@@ -1,4 +1,7 @@
 import {defineComponent, StyleValue} from "vue";
+import {useCssInJs} from "../hooks/useCssInJs.ts";
+import classNames from "classnames";
+import {genLayoutStyle} from "./style.ts";
 
 export type LayoutProps = {
     class?: string,
@@ -21,16 +24,17 @@ export const Layout = defineComponent({
         },
         direction: {
             type: String,
-            required: true,
+            required: false,
             validator: (value: string) => ['horizontal', 'vertical'].includes(value),
             default: 'horizontal'
         }
     },
     setup(props: LayoutProps, {slots}) {
-        return () => <div class={props.class} style={props.style}>{slots.default?.()}</div>
+        const prefixCls = 'triones-ant-layout';
+        const [wrapSSR, hashId] = useCssInJs({prefixCls: prefixCls, styleFun: genLayoutStyle})
+        const rootCls = classNames(prefixCls, props.class, `${prefixCls}-${props.direction}`, {
+            [hashId]: true
+        })
+        return () => wrapSSR(<div class={[classNames(rootCls)]} style={props.style}>{slots.default?.()}</div>)
     }
 })
-
-// const Layout:FunctionalComponent<LayoutProps> = (props, {slots}) => <div class={props.class} style={props.style}>{slots.default?.()}</div>
-
-// export {Layout}

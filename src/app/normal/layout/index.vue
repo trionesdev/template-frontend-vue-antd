@@ -1,14 +1,24 @@
 <script setup lang="ts">
-import {Layout, AppToolbar} from "@trionesdev/antd-vue-ext";
-import {Button} from "ant-design-vue"
+import {Layout, LayoutItem, AppToolbar} from "@trionesdev/antd-vue-ext";
 </script>
 
 <template>
-  <Layout direction="" class="h-screen" >
-    <Layout.Item ></Layout.Item>
+  <Layout direction="vertical" class="h-screen">
+    <LayoutItem>
+      <AppToolbar :nav-items="[{key:'1',label:'ss'}]" >
+        <template #title>
+          <span>TrionesDev</span>
+        </template>
+        <template #extra>
+          <div>ss</div>
+        </template>
+      </AppToolbar>
+    </LayoutItem>
+    <LayoutItem :auto="true">
+      <div>sss</div>
+    </LayoutItem>
   </Layout>
-  <AppToolbar title=""></AppToolbar>
-  <Button type="primary" icon></Button>
+
 </template>
 
 <style scoped>

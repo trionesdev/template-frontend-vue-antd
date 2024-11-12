@@ -1,34 +1,29 @@
-import {defineComponent} from "vue";
+import {defineComponent, PropType, StyleValue, SlotsType} from "vue";
 import {genAppToolbarStyle} from "./style.ts";
 import classNames from "classnames";
 import {useCssInJs} from "../hooks/useCssInJs.ts";
 import {Avatar, AvatarProps, Menu, MenuProps, Space} from "ant-design-vue";
 import _ from "lodash"
 
-type AppToolbarProps = {
-    avatar?: AvatarProps
-    navItems?: MenuProps['items']
-    selectedKeys?: string[];
-}
 export const AppToolbar = defineComponent({
     name: "AppToolbar",
     props: {
         class: {
-            type: String,
+            type: String as PropType<string>,
             required: false,
             default: ''
         },
         style: {
-            type: Object,
+            type: Object as PropType<StyleValue>,
             required: false,
             default: () => ({})
         },
         avatar: {
-            type: Object,
+            type: Object as PropType<AvatarProps>,
             required: false
         },
         navItems: {
-            type: Array,
+            type: Array<any> as PropType<MenuProps['items']>,
             required: false
         },
         selectedKeys: {
@@ -36,7 +31,11 @@ export const AppToolbar = defineComponent({
             required: false
         }
     },
-    setup(props: AppToolbarProps, {slots}) {
+    slots: Object as SlotsType<{
+        title?: any,
+        extra?: any
+    }>,
+    setup(props, {slots}) {
         const prefixCls = "app-toolbar";
         const [wrapSSR, hashId] = useCssInJs({prefixCls: prefixCls, styleFun: genAppToolbarStyle})
         const appToolbarCls = classNames(prefixCls, {

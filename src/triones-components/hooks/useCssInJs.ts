@@ -8,10 +8,10 @@ type CssInJsProps = {
     styleFun?: (prefix: string, token?: any) => CSSInterpolation
 }
 
-export const useCssInJs = (params?: CssInJsProps): [wrap: (node: VueNode) => VueNode, hashId: string ] => {
+export const useCssInJs = (params?: CssInJsProps): [wrap: (node: VueNode) => VueNode, hashId: string] => {
     const [theme, token, hashId] = useToken();
 
-    const componentInfo = computed(() => {
+    const componentInfo: any = computed(() => {
         return {
             theme: theme,
             token: token.value,

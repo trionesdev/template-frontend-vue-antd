@@ -23,7 +23,7 @@ export const AppToolbar = defineComponent({
             required: false
         },
         navItems: {
-            type: Array<any> as PropType<MenuProps['items']>,
+            type: Array as PropType<MenuProps['items']>,
             required: false
         },
         selectedKeys: {
